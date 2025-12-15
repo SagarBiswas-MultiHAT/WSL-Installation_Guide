@@ -11,6 +11,8 @@ This notebook-style guide walks you through installing **WSL2**, **Kali Linux**,
 - Open **Task Manager → Performance → CPU**
 - Look for: **Virtualization: Enabled**
 
+!()[https://imgur.com/Z5pW4W4.png]
+
 If it’s disabled, enable virtualization in your **BIOS/UEFI** settings.
 
 ---
