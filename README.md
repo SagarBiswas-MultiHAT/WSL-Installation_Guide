@@ -11,7 +11,10 @@ This notebook-style guide walks you through installing **WSL2**, **Kali Linux**,
 - Open **Task Manager → Performance → CPU**
 - Look for: **Virtualization: Enabled**
 
-!()[https://imgur.com/Z5pW4W4.png]
+<div align="center">
+
+![](https://imgur.com/Z5pW4W4.png)
+</div>
 
 If it’s disabled, enable virtualization in your **BIOS/UEFI** settings.
 
@@ -25,6 +28,11 @@ If you have **NVIDIA**, the recommended option is **Studio Driver**:
 **Check current driver date**
 - **Task Manager → Performance → GPU → Driver date**
 
+<div align="center">
+
+![](https://imgur.com/UXHWyuo.png)
+</div>
+
 ---
 
 ### 0.3 Enable required Windows Features
@@ -35,6 +43,10 @@ Enable:
 1. **Virtual Machine Platform**
 2. **Windows Subsystem for Linux**
 
+<div align="center">
+
+![](https://imgur.com/PDDBRJG.png)
+</div>
 Restart Windows if prompted.
 
 ---
@@ -140,21 +152,6 @@ Start KeX:
 kex --win
 ```
 
-Stop KeX:
-```bash
-kex --stop
-```
-
----
-
-## 6) Step 6 — (Optional) Install big Kali toolkit
-
-In the KeX Linux terminal (or Kali terminal), run:
-
-```bash
-sudo apt install kali-linux-large
-```
-
 ---
 
 ## KeX “Viewonly password (y/n)?” popup
@@ -190,10 +187,31 @@ kex --sl        # seamless mode
 
 ---
 
+
+Stop KeX:
+```bash
+kex --stop
+```
+
+---
+
+## 6) Step 6 — (Optional) Install big Kali toolkit
+
+In the KeX Linux terminal (or Kali terminal), run:
+
+```bash
+sudo apt install kali-linux-large
+```
+
 ## Installer Prompts (Recommended answers + why)
 
 ### Prompt: Install Kismet “setuid root”?
 Choose: **Yes**
+
+<div align="center">
+
+![](https://imgur.com/8MwsvoU.png)
+</div>
 
 Why **Yes** is correct:
 - Kismet needs privileges for:
@@ -210,7 +228,12 @@ Why **Yes** is correct:
 ### Prompt: “Should non-superusers be able to capture packets?”
 Choose: **Yes**
 
-Why Yes is right:
+<div align="center">
+
+![](https://imgur.com/htxIEyF.png)
+</div>
+
+Why **Yes** is right:
 - Lets you run Wireshark/Tshark without `sudo`
 - Safer than running full Wireshark as root
 - Recommended setup
@@ -251,6 +274,11 @@ You should see:
 
 ### Prompt: Run `sslh`: select `inetd` or `standalone`?
 Select: **standalone**
+
+<div align="center">
+
+![](https://imgur.com/NkwsQPk.png)
+</div>
 
 Why standalone:
 - More stable and faster for pentesting/tools
