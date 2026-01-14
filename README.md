@@ -198,7 +198,11 @@ kex --sl
 
 ### Error Case 1: TigerVNC abort (critical)
 
+<div align="center">
+
 ![](https://imgur.com/whmNxXu.png)
+
+</div>
 
 Win-KeX shows “An established connection was aborted by the software in your host machine (10053)” when the Windows host closes the VNC link. Common culprits are firewall/antivirus filters, stale displays, or a corrupted KeX session, and the bug keeps KeX from staying up.
 
@@ -217,7 +221,11 @@ If the error returns, **never click reconnect** inside the KeX window—always r
 
 ### Error Case 2: Xfce notification daemon warning (non-critical)
 
-![](https://imgur.com/zdD499O.png)
+<div align="center">
+
+![](https://imgur.com/DWDVshC.png)
+
+</div>
 
 The “Wayland compositor does not support required protocol wlr-layer-shell” notice is purely cosmetic. It appears because the Xfce notification daemon briefly probes Wayland protocols while the rest of KeX runs on X11. The session keeps working despite the message, but you can silence it.
 
