@@ -206,18 +206,113 @@ If you encounter errors when using Win‑KeX or related tools, review the specif
 
 </div>
 
-Win-KeX shows “An established connection was aborted by the software in your host machine (10053)” when the Windows host closes the VNC link. Common culprits are firewall/antivirus filters, stale displays, or a corrupted KeX session, and the bug keeps KeX from staying up.
+**What this error really means**
 
-**Recovery checklist (follow in order):**
+Win-KeX (via TigerVNC Viewer) may show:
 
-1. `kex --stop` to halt every KeX service.
-2. `pkill Xtigervnc` and `pkill kex` to terminate any ghost processes.
-3. `rm -rf ~/.vnc` to drop damaged display sockets.
-4. `rm -rf ~/.config/kex` to wipe KeX user configuration.
-5. `kex --passwd` to recreate a clean password (answer `n` to the view-only prompt; use 6–8 characters).
-6. `kex --win --force` to start in windowed mode, which is the most stable launcher.
+> “An established connection was aborted by the software in your host machine (10053)”
 
-If the error returns, **never click reconnect** inside the KeX window—always repeat the recovery steps from a fresh Kali shell.
+This message can be either normal behavior or a real KeX failure. The key is **when** it happens.
+
+#### Case A — 10053 appears after you stop KeX / shutdown WSL (normal)
+
+This is **expected** if you:
+
+- Shut down Kali (e.g., `sudo poweroff`)
+- Stop KeX (`kex --stop`)
+- Shut down WSL (`wsl --shutdown`)
+- While the TigerVNC Viewer window is still open
+
+**What’s happening**
+
+- The VNC server stopped intentionally
+- Windows detects the connection is gone
+- TigerVNC reports it as 10053 (notification, not a crash)
+
+**Correct action**
+
+- Click **No** (do not reconnect)
+- Close TigerVNC Viewer
+- Do nothing else
+
+**Do NOT**
+
+- Click “Reconnect”
+- Run recovery commands
+- Reinstall Win-KeX
+
+#### Case B — 10053 appears while Kali is running (real problem)
+
+This is the critical case. Typical symptoms:
+
+- KeX disconnects immediately after launch
+- “Reconnect” loops endlessly
+- The GUI never stays open
+
+Common causes:
+
+- Corrupted/stale VNC socket files
+- Broken KeX user config
+- Interrupted KeX startup
+- Security software interfering on the Windows side
+
+**Recovery checklist (ONLY for Case B)**
+
+Run these in order from a fresh Kali shell:
+
+1. Stop KeX cleanly
+
+```bash
+kex --stop
+```
+
+2. Kill any ghost VNC / KeX processes
+
+```bash
+pkill Xtigervnc
+pkill kex
+```
+
+3. Remove broken VNC display files
+
+```bash
+rm -rf ~/.vnc
+```
+
+4. Remove KeX user configuration
+
+```bash
+rm -rf ~/.config/kex
+```
+
+5. Reset the KeX password
+
+```bash
+kex --passwd
+```
+
+- When asked `Viewonly password (y/n)?` answer: `n`
+- Use a 6–8 character password
+
+6. Start KeX in the most stable mode
+
+```bash
+kex --win --force
+```
+
+**Important rule (do NOT skip)**
+
+If 10053 is happening during a real crash, don’t click “Reconnect” in TigerVNC.
+Close the viewer and restart KeX cleanly after completing the checklist.
+
+**Quick decision table**
+
+| Situation                           | What to do                                              |
+| ----------------------------------- | ------------------------------------------------------- |
+| 10053 after shutdown / `kex --stop` | Click **No**, close TigerVNC (normal)                   |
+| 10053 during KeX startup            | Run the recovery checklist above                        |
+| 10061 (connection refused)          | Restart KeX and/or run `wsl --shutdown`, then try again |
+| GUI opens normally                  | Ignore past errors                                      |
 
 ---
 
