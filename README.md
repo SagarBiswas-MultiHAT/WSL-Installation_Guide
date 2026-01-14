@@ -307,12 +307,16 @@ Close the viewer and restart KeX cleanly after completing the checklist.
 
 **Quick decision table**
 
+<div align="center">
+
 | Situation                           | What to do                                              |
 | ----------------------------------- | ------------------------------------------------------- |
 | 10053 after shutdown / `kex --stop` | Click **No**, close TigerVNC (normal)                   |
 | 10053 during KeX startup            | Run the recovery checklist above                        |
 | 10061 (connection refused)          | Restart KeX and/or run `wsl --shutdown`, then try again |
 | GUI opens normally                  | Ignore past errors                                      |
+
+</div>
 
 ---
 
