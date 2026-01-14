@@ -7,13 +7,16 @@ This notebook-style guide walks you through installing **WSL2**, **Kali Linux**,
 ## 0) Prerequisites (Do these first)
 
 ### 0.1 Virtualization must be enabled
+
 **How to check**
+
 - Open **Task Manager → Performance → CPU**
 - Look for: **Virtualization: Enabled**
 
 <div align="center">
 
 ![](https://imgur.com/Z5pW4W4.png)
+
 </div>
 
 If it’s disabled, enable virtualization in your **BIOS/UEFI** settings.
@@ -21,31 +24,39 @@ If it’s disabled, enable virtualization in your **BIOS/UEFI** settings.
 ---
 
 ### 0.2 Install the latest graphics driver (important for GPU acceleration)
+
 If you have **NVIDIA**, the recommended option is **Studio Driver**:
+
 - Supports **WSL GPU acceleration**, **CUDA development**, and creative apps
 - Occasional gaming still works fine (only very new games may miss day-one optimizations)
 
 **Check current driver date**
+
 - **Task Manager → Performance → GPU → Driver date**
 
 <div align="center">
 
 ![](https://imgur.com/UXHWyuo.png)
+
 </div>
 
 ---
 
 ### 0.3 Enable required Windows Features
+
 Open:
+
 - Press the **Windows key** → search **“Turn Windows features on or off”**
 
 Enable:
+
 1. **Virtual Machine Platform**
 2. **Windows Subsystem for Linux**
 
 <div align="center">
 
 ![](https://imgur.com/PDDBRJG.png)
+
 </div>
 Restart Windows if prompted.
 
@@ -123,16 +134,19 @@ sudo apt update
 If `sudo apt update` shows mirror/network errors:
 
 ### 4.1 Edit Kali sources
+
 ```bash
 sudo nano /etc/apt/sources.list
 ```
 
 ### 4.2 Replace everything with:
+
 ```text
 deb https://ftp.halifax.rwth-aachen.de/kali kali-rolling main contrib non-free non-free-firmware
 ```
 
 Then run:
+
 ```bash
 sudo apt update
 ```
@@ -148,6 +162,7 @@ sudo apt install kali-win-kex
 ```
 
 Start KeX:
+
 ```bash
 kex --win
 ```
@@ -159,20 +174,60 @@ kex --win
 **Answer: `n`**
 
 Why `n` is correct:
+
 - `y` = view-only (cannot click or type)
 - `n` = full control (keyboard + mouse)
 
 For pentesting/labs/tools, you need full control.
 
 What happens next:
+
 - KeX server starts
 - Windows KeX window launches automatically
 - Kali desktop appears
 
 Recommended lighter daily usage (optional):
+
 ```bash
 kex --sl
 ```
+
+---
+
+### Error Case 1: TigerVNC abort (critical)
+
+![](https://imgur.com/whmNxXu.png)
+
+Win-KeX shows “An established connection was aborted by the software in your host machine (10053)” when the Windows host closes the VNC link. Common culprits are firewall/antivirus filters, stale displays, or a corrupted KeX session, and the bug keeps KeX from staying up.
+
+**Recovery checklist (follow in order):**
+
+1. `kex --stop` to halt every KeX service.
+2. `pkill Xtigervnc` and `pkill kex` to terminate any ghost processes.
+3. `rm -rf ~/.vnc` to drop damaged display sockets.
+4. `rm -rf ~/.config/kex` to wipe KeX user configuration.
+5. `kex --passwd` to recreate a clean password (answer `n` to the view-only prompt; use 6–8 characters).
+6. `kex --win --force` to start in windowed mode, which is the most stable launcher.
+
+If the error returns, **never click reconnect** inside the KeX window—always repeat the recovery steps from a fresh Kali shell.
+
+---
+
+### Error Case 2: Xfce notification daemon warning (non-critical)
+
+![](https://imgur.com/zdD499O.png)
+
+The “Wayland compositor does not support required protocol wlr-layer-shell” notice is purely cosmetic. It appears because the Xfce notification daemon briefly probes Wayland protocols while the rest of KeX runs on X11. The session keeps working despite the message, but you can silence it.
+
+**Optional: permanently suppress the popup**
+
+1. `mkdir -p ~/.config/autostart`
+2. `cp /etc/xdg/autostart/xfce4-notifyd.desktop ~/.config/autostart/`
+3. `nano ~/.config/autostart/xfce4-notifyd.desktop` and change (or add) `Hidden=false` → `Hidden=true`.
+4. Save and exit the editor.
+5. Restart the KeX GUI with `kex --stop` followed by `kex --win`.
+
+Once those lines are updated, the notification daemon will stay quiet for good.
 
 ---
 
@@ -187,8 +242,8 @@ kex --sl        # seamless mode
 
 ---
 
-
 Stop KeX:
+
 ```bash
 kex --stop
 ```
@@ -206,14 +261,17 @@ sudo apt install kali-linux-large
 ## Installer Prompts (Recommended answers + why)
 
 ### Prompt: Install Kismet “setuid root”?
+
 Choose: **Yes**
 
 <div align="center">
 
 ![](https://imgur.com/8MwsvoU.png)
+
 </div>
 
 Why **Yes** is correct:
+
 - Kismet needs privileges for:
   - Monitor mode
   - Packet capture
@@ -226,66 +284,80 @@ Why **Yes** is correct:
 ---
 
 ### Prompt: “Should non-superusers be able to capture packets?”
+
 Choose: **Yes**
 
 <div align="center">
 
 ![](https://imgur.com/htxIEyF.png)
+
 </div>
 
 Why **Yes** is right:
+
 - Lets you run Wireshark/Tshark without `sudo`
 - Safer than running full Wireshark as root
 - Recommended setup
 
 What happens:
+
 - Uses group `wireshark`
 - Capture handled by `dumpcap` (minimal privileged component)
 
 **IMPORTANT after installation (don’t skip)**
 
 Check group membership:
+
 ```bash
 groups
 ```
 
 If you see `wireshark`:
+
 - You’re done.
 
 If you do **NOT** see `wireshark`, run:
+
 ```bash
 sudo usermod -aG wireshark $USER
 ```
 
 Then restart WSL:
+
 ```powershell
 wsl --shutdown
 ```
 
 Verify again (reopen Kali):
+
 ```bash
 groups
 ```
 
 You should see:
+
 - `wireshark`
 
 ---
 
 ### Prompt: Run `sslh`: select `inetd` or `standalone`?
+
 Select: **standalone**
 
 <div align="center">
 
 ![](https://imgur.com/NkwsQPk.png)
+
 </div>
 
 Why standalone:
+
 - More stable and faster for pentesting/tools
 - Doesn’t spawn a new process per connection
 - Recommended for Kali usage
 
 Rule of thumb:
+
 - Pentesting/labs/tools → **standalone**
 - Rare/minimal server traffic → **inetd**
 
@@ -294,52 +366,65 @@ Rule of thumb:
 ## Tips: Stopping KeX vs stopping WSL
 
 ### 1) Stop only the KeX GUI (keep WSL distro running)
+
 ```bash
 kex --stop
 ```
 
 Effect:
+
 - Stops Win-KeX server and closes KeX window(s)
 - Kali WSL instance keeps running
 
 ---
 
 ### 2) Close your current shell/desktop session
+
 Inside Kali:
+
 ```bash
 exit
 ```
+
 (or logout)
 
 Effect:
+
 - Closes that session
 - WSL may still remain running in the background
 
 ---
 
 ### 3) Stop (terminate) only Kali from Windows (recommended to fully stop just Kali)
+
 PowerShell:
+
 ```powershell
 wsl --terminate kali-linux
 ```
 
 Shorthand:
+
 ```powershell
 wsl -t kali-linux
 ```
 
 Effect:
+
 - Immediately ends that distro process (stops services, closes shells)
 
 ---
 
 ### 4) Shutdown the entire WSL VM (all distros)
+
 PowerShell:
+
 ```powershell
 wsl --shutdown
 ```
 
 Effect:
+
 - Stops WSL2 utility VM and all running distros
 - Good after big installs or to free resources
 
@@ -348,43 +433,53 @@ Effect:
 ## Error Case 1: `kex` not found + `dpkg` interrupted
 
 Example:
+
 ```bash
 kex --win
 ```
 
 You may see:
+
 - `Command 'kex' not found, but can be installed with: sudo apt install kali-win-kex`
 - During install/reinstall:
   - `Error: dpkg was interrupted, you must manually run 'sudo dpkg --configure -a' to correct the problem.`
 
 Meaning:
+
 - The package system was left unfinished, so `apt` is blocked until repaired.
 
 ### Step 1 — Fix broken dpkg state (MANDATORY)
+
 Run inside Kali:
+
 ```bash
 sudo dpkg --configure -a
 ```
 
 ### Step 2 — Fix broken dependencies (if any)
+
 ```bash
 sudo apt --fix-broken install
 ```
 
 ### Step 3 — Update packages list
+
 ```bash
 sudo apt update
 ```
 
 ### Step 4 — Reinstall Win-KeX cleanly
+
 ```bash
 sudo apt install --reinstall kali-win-kex
 ```
 
 ### Step 5 — Start KeX
+
 ```bash
 kex --win
 ```
 
 Note:
+
 - First run will ask you to set a **KeX password**.
