@@ -194,6 +194,8 @@ kex --sl
 
 ---
 
+## Extra: Error Cases
+
 ### Error Case 1: TigerVNC abort (critical)
 
 ![](https://imgur.com/whmNxXu.png)
