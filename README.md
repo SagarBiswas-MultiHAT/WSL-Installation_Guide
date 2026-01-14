@@ -196,7 +196,9 @@ kex --sl
 
 ## Extra: Error Cases
 
-### Error Case 1: TigerVNC abort (critical)
+If you encounter errors when using Win‑KeX or related tools, review the specific cases below for common causes and step-by-step recovery instructions. Follow the checklist in each subsection before reporting bugs or seeking help.
+
+### 5.1 Error Case 1: TigerVNC abort (critical)
 
 <div align="center">
 
@@ -219,7 +221,7 @@ If the error returns, **never click reconnect** inside the KeX window—always r
 
 ---
 
-### Error Case 2: Xfce notification daemon warning (non-critical)
+### 5.2 Error Case 2: Xfce notification daemon warning (non-critical)
 
 <div align="center">
 
