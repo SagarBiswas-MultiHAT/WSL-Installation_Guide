@@ -186,15 +186,17 @@ What happens next:
 - Windows KeX window launches automatically
 - Kali desktop appears
 
+---
+
+- Download & Install TigerVNC: https://sourceforge.net/projects/tigervnc/
+
+---
+
 Recommended lighter daily usage (optional):
 
 ```bash
 kex --sl
 ```
-
----
-
-- Download & Install TigerVNC: https://sourceforge.net/projects/tigervnc/
 
 ---
 
