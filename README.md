@@ -194,23 +194,25 @@ kex --sl
 
 ---
 
+- Download & Install TigerVNC: https://sourceforge.net/projects/tigervnc/
+
+---
+
 ## Extra: Error Cases
 
 If you encounter errors when using Win‑KeX or related tools, review the specific cases below for common causes and step-by-step recovery instructions. Follow the checklist in each subsection before reporting bugs or seeking help.
 
 ### 5.1 Error Case 1: TigerVNC abort (critical)
 
+**What this error really means**
+
+Win-KeX (via TigerVNC Viewer) may show:
+
 <div align="center">
 
 ![](https://imgur.com/whmNxXu.png)
 
 </div>
-
-**What this error really means**
-
-Win-KeX (via TigerVNC Viewer) may show:
-
-> “An established connection was aborted by the software in your host machine (10053)”
 
 This message can be either normal behavior or a real KeX failure. The key is **when** it happens.
 
@@ -309,12 +311,12 @@ Close the viewer and restart KeX cleanly after completing the checklist.
 
 <div align="center">
 
-| Situation                           | What to do                                              |
-| ----------------------------------- | ------------------------------------------------------- |
-| 10053 after shutdown / `kex --stop` | Click **No**, close TigerVNC (normal)                   |
-| 10053 during KeX startup            | Run the recovery checklist above                        |
-| 10061 (connection refused)          | Restart KeX and/or run `wsl --shutdown`, then try again |
-| GUI opens normally                  | Ignore past errors                                      |
+| Situation                           | What to do                                                            |
+| ----------------------------------- | --------------------------------------------------------------------- |
+| 10053 after shutdown / `kex --stop` | Click **No**, close TigerVNC (normal)                                 |
+| 10053 during KeX startup            | Click **YES (once)**, Run the recovery checklist above                |
+| 10061 (connection refused)          | Click **No**, Restart KeX and/or run `wsl --shutdown`, then try again |
+| GUI opens normally                  | Ignore past errors                                                    |
 
 </div>
 
